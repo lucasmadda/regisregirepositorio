@@ -1200,6 +1200,114 @@ button.track-head:hover .solo-badge { border-color: var(--muted); }
 
 .card:hover::after, .skill-panel:hover::after, .ficha:hover::after { opacity: 1; }
 
+/* ---------- monitor de referência: retrato no hero ---------- */
+
+.hero-mid {
+  display: grid;
+  grid-template-columns: 1.15fr .85fr;
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: center;
+  margin-bottom: clamp(2.5rem, 6vw, 4rem);
+}
+
+.hero-mid .hero-actions { margin-bottom: 0; }
+
+.monitor { max-width: 460px; justify-self: end; width: 100%; }
+
+.monitor-frame {
+  position: relative;
+  margin: 0;
+  background: var(--bg-deep);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .45);
+  overflow: hidden;
+}
+
+.monitor-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+  filter: grayscale(.85) contrast(1.06) brightness(.94);
+  transition: filter .7s ease;
+}
+
+/* o LUT entra no hover; em telas de toque, a cor já vem aplicada */
+.monitor-frame:hover img { filter: none; }
+
+@media (hover: none) {
+  .monitor-frame img { filter: none; }
+  .monitor-lut { display: none; }
+}
+
+.monitor-corners {
+  position: absolute;
+  inset: 22px;
+  pointer-events: none;
+  opacity: .85;
+  background:
+    linear-gradient(#f2f0eb, #f2f0eb) left top / 16px 2px,
+    linear-gradient(#f2f0eb, #f2f0eb) left top / 2px 16px,
+    linear-gradient(#f2f0eb, #f2f0eb) right top / 16px 2px,
+    linear-gradient(#f2f0eb, #f2f0eb) right top / 2px 16px,
+    linear-gradient(#f2f0eb, #f2f0eb) left bottom / 16px 2px,
+    linear-gradient(#f2f0eb, #f2f0eb) left bottom / 2px 16px,
+    linear-gradient(#f2f0eb, #f2f0eb) right bottom / 16px 2px,
+    linear-gradient(#f2f0eb, #f2f0eb) right bottom / 2px 16px;
+  background-repeat: no-repeat;
+}
+
+.monitor-hud {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  font-family: var(--font-mono);
+  font-size: .6rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  color: #f2f0eb;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, .7);
+  pointer-events: none;
+}
+
+.hud-tl { top: 26px; left: 30px; }
+.hud-tr { top: 26px; right: 30px; color: var(--rec); }
+.hud-bl { bottom: 26px; left: 30px; font-variant-numeric: tabular-nums; }
+.hud-br { bottom: 26px; right: 30px; color: var(--muted); }
+
+.monitor-scan {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  height: 18%;
+  top: -20%;
+  pointer-events: none;
+  background: linear-gradient(transparent, rgba(255, 255, 255, .045), transparent);
+  animation: monitor-scan 7s linear infinite;
+}
+
+@keyframes monitor-scan {
+  from { top: -20%; }
+  to   { top: 120%; }
+}
+
+.monitor-caption {
+  margin: .7rem 2px 0;
+  font-family: var(--font-mono);
+  font-size: .64rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+@media (max-width: 940px) {
+  .hero-mid { grid-template-columns: 1fr; }
+  .monitor { justify-self: start; max-width: 420px; }
+}
+
 /* ---------- bin de mídia: catálogo do Medium ---------- */
 
 .bin {
@@ -1381,6 +1489,8 @@ button.track-head:hover .solo-badge { border-color: var(--muted); }
 @media (prefers-reduced-motion: reduce) {
   .hero-name:hover { animation: none; }
   .bin-item > a { animation: none; }
+  .monitor-scan { animation: none; opacity: 0; }
+  .monitor-frame img { filter: none; transition: none; }
   .progress i { box-shadow: none; }
   .cards .card { transition: none; }
   .clip { transition: none; }
