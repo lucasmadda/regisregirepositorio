@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lab NLP · Ex-TV Nerd sob análise</title>
+  <meta name="description" content="Análise de linguagem natural dos textos de Régis Regi no Medium: termos, sentimento, legibilidade e as plataformas que dominam o discurso.">
+  <meta name="robots" content="index,follow">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="lab-page">
+  <a class="skip-link" href="#lab">Pular para a análise</a>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="Voltar ao portfólio">
+      <span class="brand-mark" aria-hidden="true">RR</span>
+      <span class="brand-name">Régis Regi</span>
+    </a>
+    <nav class="topnav" aria-label="Navegação do lab">
+      <a href="index.html#medium">← Voltar ao portfólio</a>
+    </nav>
+    <div class="topbar-right">
+      <span class="rec" aria-hidden="true"><span class="rec-dot"></span>SCAN</span>
+      <span class="timecode" id="lab-clock" aria-hidden="true">LAB_NLP</span>
+    </div>
+  </header>
+
+  <main id="lab" class="lab">
+    <div class="container">
+
+      <header class="section-head" style="margin-top: clamp(2rem, 5vw, 3.5rem);">
+        <span class="section-num">07</span>
+        <h2>Lab NLP</h2>
+        <span class="section-rule" aria-hidden="true"></span>
+      </header>
+      <p class="section-sub">O corpus do <a class="lab-link" href="https://extvnerd.medium.com" target="_blank" rel="noopener">Ex-TV Nerd</a> passa pelo scanner: os textos são baixados ao vivo do feed do Medium e analisados aqui mesmo, no seu navegador. Passe o mouse (ou o foco) sobre qualquer marca para ler os valores; clique num termo para rastreá-lo nos textos.</p>
+
+      <div class="lab-status" id="lab-status" role="status">Sincronizando corpus com o Medium…</div>
+
+      <div class="lab-body" id="lab-body" hidden>
+
+        <!-- KPI row -->
+        <div class="tiles" id="tiles"></div>
+
+        <!-- Termos -->
+        <section class="scope" id="scope-termos">
+          <div class="scope-head">
+            <h3>Termos que dominam o corpus</h3>
+            <p>As palavras mais frequentes depois de removidas as vazias. Clique numa barra para rastrear o termo nos textos, abaixo.</p>
+          </div>
+          <div class="scope-plot" id="plot-termos"></div>
+        </section>
+
+        <!-- Citações -->
+        <section class="scope" id="scope-radar">
+          <div class="scope-head">
+            <h3>Radar de plataformas &amp; canais</h3>
+            <p>Quem domina o discurso: menções diretas nos textos.</p>
+          </div>
+          <div class="scope-plot" id="plot-radar"></div>
+        </section>
+
+        <!-- Sentimento -->
+        <section class="scope" id="scope-sentimento">
+          <div class="scope-head">
+            <h3>Temperatura dos textos</h3>
+            <p>Saldo de vocabulário positivo <i class="key key-pos" aria-hidden="true"></i> e negativo <i class="key key-neg" aria-hidden="true"></i> por texto, léxico PT-BR. Zero é neutro.</p>
+          </div>
+          <div class="scope-plot" id="plot-sentimento"></div>
+        </section>
+
+        <!-- Tamanho -->
+        <section class="scope" id="scope-tamanho">
+          <div class="scope-head">
+            <h3>Fôlego de cada texto</h3>
+            <p>Palavras por texto, em ordem de publicação. O tooltip traz tempo de leitura e os termos característicos (TF-IDF).</p>
+          </div>
+          <div class="scope-plot" id="plot-tamanho"></div>
+        </section>
+
+        <!-- Scatter -->
+        <section class="scope" id="scope-estilo">
+          <div class="scope-head">
+            <h3>Mapa de estilo</h3>
+            <p>Cada ponto é um texto: frases longas ficam à direita, vocabulário mais variado fica no alto.</p>
+          </div>
+          <div class="scope-plot" id="plot-estilo"></div>
+        </section>
+
+        <!-- Bigramas -->
+        <section class="scope" id="scope-bigramas">
+          <div class="scope-head">
+            <h3>Expressões de assinatura</h3>
+            <p>Os pares de palavras que mais se repetem no corpus.</p>
+          </div>
+          <ul class="bigramas" id="bigramas"></ul>
+        </section>
+
+        <!-- Tabela -->
+        <details class="lab-table-wrap">
+          <summary>Ver tudo como tabela</summary>
+          <div class="lab-table-scroll">
+            <table class="lab-table" id="lab-table">
+              <caption class="visually-hidden">Métricas de NLP por texto do Medium</caption>
+              <thead>
+                <tr><th scope="col">Texto</th><th scope="col">Data</th><th scope="col">Palavras</th><th scope="col">Leitura</th><th scope="col">Frase média</th><th scope="col">Diversidade</th><th scope="col">Legibilidade</th><th scope="col">Temperatura</th><th scope="col">Termos-assinatura</th></tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </details>
+
+        <p class="lab-foot">Metodologia: tokenização e remoção de stopwords PT-BR; TF-IDF por texto; sentimento por léxico; legibilidade Flesch adaptada ao português; tudo computado localmente no seu navegador, sem servidores. O feed do Medium expõe os textos mais recentes.</p>
+      </div>
+
+      <noscript><p class="lab-status">O Lab NLP precisa de JavaScript para baixar e analisar os textos. <a class="lab-link" href="https://extvnerd.medium.com">Leia direto no Medium ↗</a></p></noscript>
+    </div>
+  </main>
+
+  <div class="lab-tip" id="lab-tip" hidden></div>
+
+  <script src="js/analise.js"></script>
+</body>
+</html>
