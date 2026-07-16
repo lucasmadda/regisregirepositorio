@@ -1200,6 +1200,153 @@ button.track-head:hover .solo-badge { border-color: var(--muted); }
 
 .card:hover::after, .skill-panel:hover::after, .ficha:hover::after { opacity: 1; }
 
+/* ---------- bin de mídia: catálogo do Medium ---------- */
+
+.bin {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.bin-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: .8rem 1.1rem;
+  border-bottom: 1px solid var(--line);
+  background: var(--panel-2);
+}
+
+.bin-search {
+  flex: 1;
+  min-width: 0;
+  background: var(--bg-deep);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: .55rem .9rem;
+  font-family: var(--font-mono);
+  font-size: .78rem;
+  letter-spacing: .04em;
+  color: var(--text);
+}
+
+.bin-search::placeholder { color: var(--muted); }
+
+.bin-search:focus {
+  outline: none;
+  border-color: var(--amber);
+}
+
+.bin-open {
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--text);
+  text-decoration: none;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--rec);
+  padding-bottom: 2px;
+  transition: color .2s ease;
+}
+
+.bin-open:hover { color: var(--rec); }
+
+.bin-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 480px;
+  overflow-y: auto;
+}
+
+.bin-status {
+  padding: 1.6rem 1.2rem;
+  font-family: var(--font-mono);
+  font-size: .78rem;
+  color: var(--muted);
+}
+
+.bin-status a { color: var(--text); }
+.bin-status a:hover { color: var(--rec); }
+
+.bin-item { border-bottom: 1px solid var(--line); }
+.bin-item:last-child { border-bottom: none; }
+
+.bin-item.off { display: none; }
+
+.bin-item > a {
+  display: grid;
+  grid-template-columns: 52px 1fr auto;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 1rem 1.2rem;
+  text-decoration: none;
+  transition: background .15s ease;
+  animation: bin-in .4s ease both;
+  animation-delay: var(--d, 0s);
+}
+
+@keyframes bin-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.bin-item > a:hover { background: rgba(255, 255, 255, .035); }
+
+.bin-item > a:hover .bin-title { color: var(--amber); }
+
+.bin-num {
+  font-family: var(--font-mono);
+  font-size: .68rem;
+  color: var(--muted);
+}
+
+.bin-main {
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+  min-width: 0;
+}
+
+.bin-title {
+  font-weight: 600;
+  font-size: 1.02rem;
+  color: var(--text);
+  transition: color .15s ease;
+}
+
+.bin-desc {
+  font-size: .85rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.bin-tags {
+  font-family: var(--font-mono);
+  font-size: .62rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--amber);
+}
+
+.bin-date {
+  font-family: var(--font-mono);
+  font-size: .7rem;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  .bin-toolbar { flex-direction: column; align-items: stretch; gap: .6rem; }
+  .bin-item > a { grid-template-columns: 1fr auto; }
+  .bin-num { display: none; }
+}
+
 /* ---------- HUD do shuttle J·K·L ---------- */
 
 .shuttle-hud {
@@ -1233,6 +1380,7 @@ button.track-head:hover .solo-badge { border-color: var(--muted); }
 
 @media (prefers-reduced-motion: reduce) {
   .hero-name:hover { animation: none; }
+  .bin-item > a { animation: none; }
   .progress i { box-shadow: none; }
   .cards .card { transition: none; }
   .clip { transition: none; }
