@@ -332,4 +332,160 @@
   /* o usuário assume o controle: roda do mouse/toque interrompe o shuttle */
   window.addEventListener("wheel", function () { stopShuttle(true); }, { passive: true });
   window.addEventListener("touchstart", function () { stopShuttle(true); }, { passive: true });
+
+  /* ---------- bin de mídia: catálogo do Medium ---------- */
+
+  var binList = document.getElementById("bin-list");
+  var binCount = document.getElementById("bin-count");
+  var binSearch = document.getElementById("bin-search");
+
+  if (binList) {
+    var MEDIUM_USER = "extvnerd";
+    var MEDIUM_HOME = "https://" + MEDIUM_USER + ".medium.com";
+    var FEED_API = "https://api.rss2json.com/v1/api.json?rss_url=" +
+      encodeURIComponent("https://medium.com/feed/@" + MEDIUM_USER);
+
+    /* textos conhecidos que podem já ter saído da janela do feed RSS */
+    var SEED_POSTS = [
+      {
+        title: "Melhores da Década",
+        link: "https://extvnerd.medium.com/melhores-da-d%C3%A9cada-628cf13c935e",
+        pubDate: "",
+        description: "",
+        categories: []
+      }
+    ];
+
+    var MESES_BIN = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
+
+    var normalizeLink = function (url) {
+      return (url || "").split("?")[0].replace(/\/$/, "");
+    };
+
+    var stripHtml = function (html) {
+      var el = document.createElement("div");
+      el.innerHTML = html || "";
+      return (el.textContent || "").replace(/\s+/g, " ").trim();
+    };
+
+    var formatDate = function (pubDate) {
+      var d = new Date(pubDate);
+      if (!pubDate || isNaN(d.getTime())) { return ""; }
+      return MESES_BIN[d.getMonth()] + " " + d.getFullYear();
+    };
+
+    var renderBin = function (posts) {
+      binList.textContent = "";
+      posts.forEach(function (post, i) {
+        var li = document.createElement("li");
+        li.className = "bin-item";
+        li.style.setProperty("--d", (i * 0.05) + "s");
+
+        var a = document.createElement("a");
+        a.href = post.link;
+        a.target = "_blank";
+        a.rel = "noopener";
+
+        var num = document.createElement("span");
+        num.className = "bin-num";
+        num.textContent = String(i + 1).padStart(3, "0");
+
+        var main = document.createElement("span");
+        main.className = "bin-main";
+
+        var title = document.createElement("span");
+        title.className = "bin-title";
+        title.textContent = post.title;
+        main.appendChild(title);
+
+        var snippet = stripHtml(post.description);
+        if (snippet) {
+          var desc = document.createElement("span");
+          desc.className = "bin-desc";
+          desc.textContent = snippet.length > 150 ? snippet.slice(0, 150).trimEnd() + "…" : snippet;
+          main.appendChild(desc);
+        }
+
+        if (post.categories && post.categories.length) {
+          var tags = document.createElement("span");
+          tags.className = "bin-tags";
+          tags.textContent = post.categories.slice(0, 4).join(" · ");
+          main.appendChild(tags);
+        }
+
+        var date = document.createElement("span");
+        date.className = "bin-date";
+        date.textContent = formatDate(post.pubDate) || "arquivo";
+
+        a.appendChild(num);
+        a.appendChild(main);
+        a.appendChild(date);
+        li.appendChild(a);
+        binList.appendChild(li);
+      });
+    };
+
+    var updateCount = function (visible, total) {
+      if (!binCount) { return; }
+      binCount.textContent = (visible === total ? total : visible + "/" + total) +
+        (total === 1 ? " CLIPE NO BIN" : " CLIPES NO BIN");
+    };
+
+    var binFail = function () {
+      var status = document.getElementById("bin-status");
+      if (binCount) { binCount.textContent = "OFFLINE"; }
+      if (!status) { return; }
+      status.textContent = "Não deu para sincronizar com o Medium agora. ";
+      var a = document.createElement("a");
+      a.href = MEDIUM_HOME;
+      a.target = "_blank";
+      a.rel = "noopener";
+      a.textContent = "Abra o catálogo direto no Medium ↗";
+      status.appendChild(a);
+    };
+
+    fetch(FEED_API)
+      .then(function (res) {
+        if (!res.ok) { throw new Error("HTTP " + res.status); }
+        return res.json();
+      })
+      .then(function (data) {
+        var items = (data && data.status === "ok" && data.items) ? data.items : [];
+        var seen = {};
+        var posts = [];
+
+        items.concat(SEED_POSTS).forEach(function (item) {
+          var key = normalizeLink(item.link);
+          if (!key || seen[key]) { return; }
+          seen[key] = true;
+          posts.push(item);
+        });
+
+        if (!posts.length) { throw new Error("feed vazio"); }
+
+        /* mais recentes primeiro; itens sem data vão para o fim (arquivo) */
+        posts.sort(function (a, b) {
+          var ta = Date.parse(a.pubDate) || 0;
+          var tb = Date.parse(b.pubDate) || 0;
+          return tb - ta;
+        });
+
+        renderBin(posts);
+        updateCount(posts.length, posts.length);
+
+        if (binSearch) {
+          binSearch.addEventListener("input", function () {
+            var q = binSearch.value.trim().toLowerCase();
+            var visible = 0;
+            binList.querySelectorAll(".bin-item").forEach(function (li) {
+              var hit = !q || li.textContent.toLowerCase().indexOf(q) !== -1;
+              li.classList.toggle("off", !hit);
+              if (hit) { visible += 1; }
+            });
+            updateCount(visible, posts.length);
+          });
+        }
+      })
+      .catch(binFail);
+  }
 })();
