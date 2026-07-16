@@ -11,6 +11,7 @@
      Rolar a página é fazer scrubbing no corte. */
 
   var tcEl = document.getElementById("timecode");
+  var monitorTcEl = document.getElementById("monitor-tc");
   var barEl = document.getElementById("progressbar");
   var FILM_SECONDS = 8 * 60;
 
@@ -20,12 +21,14 @@
     var doc = document.documentElement;
     var max = doc.scrollHeight - window.innerHeight;
     var p = max > 0 ? Math.min(Math.max(window.scrollY / max, 0), 1) : 0;
-    if (tcEl) {
+    if (tcEl || monitorTcEl) {
       var t = p * FILM_SECONDS;
       var frames = Math.floor((t % 1) * 24);
       var s = Math.floor(t) % 60;
       var m = Math.floor(t / 60) % 60;
-      tcEl.textContent = "00:" + pad(m) + ":" + pad(s) + ":" + pad(frames);
+      var tc = "00:" + pad(m) + ":" + pad(s) + ":" + pad(frames);
+      if (tcEl) { tcEl.textContent = tc; }
+      if (monitorTcEl) { monitorTcEl.textContent = tc; }
     }
     if (barEl) { barEl.style.width = (p * 100).toFixed(2) + "%"; }
   }
