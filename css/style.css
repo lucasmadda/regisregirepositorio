@@ -1677,6 +1677,220 @@ body[data-lut="vhs"] .vhs-osd { display: flex; }
   .knob-label { display: none; }
 }
 
+/* ---------- lab NLP ---------- */
+
+.lab { padding-bottom: clamp(3rem, 7vw, 5rem); }
+.lab-page { background: var(--bg); }
+
+.lab-link {
+  color: var(--text);
+  text-decoration: none;
+  border-bottom: 1px solid var(--rec);
+}
+.lab-link:hover { color: var(--rec); }
+
+.lab-status {
+  font-family: var(--font-mono);
+  font-size: .8rem;
+  color: var(--muted);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.4rem 1.3rem;
+  margin-bottom: 1.4rem;
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.4rem;
+}
+
+.tile {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.1rem 1.2rem;
+}
+
+.tile-valor {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  line-height: 1;
+  color: var(--text);
+  margin: 0 0 .45rem;
+}
+
+.tile-label {
+  font-family: var(--font-mono);
+  font-size: .64rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0;
+}
+
+.scope {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.3rem 1.4rem 1.1rem;
+  margin-bottom: 1.4rem;
+}
+
+.scope-head h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: .3rem;
+}
+
+.scope-head p {
+  font-size: .82rem;
+  color: var(--muted);
+  margin-bottom: 1.1rem;
+}
+
+.scope-plot { overflow-x: auto; }
+.scope-plot svg { display: block; min-width: 560px; }
+
+.scope-nota {
+  font-family: var(--font-mono);
+  font-size: .7rem;
+  color: var(--amber);
+  margin: 0 0 .8rem;
+}
+
+.key {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  vertical-align: baseline;
+}
+.key-pos { background: #2a9a85; }
+.key-neg { background: #f0392c; }
+
+.mark { outline: none; }
+.mark:hover .bar, .mark:focus-visible .bar { filter: brightness(1.2); }
+.mark.selected .bar { filter: brightness(1.25); }
+.mark:focus-visible { outline: 1px solid var(--amber); outline-offset: 2px; }
+
+.bigramas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+
+.bigrama {
+  display: inline-flex;
+  align-items: baseline;
+  gap: .5rem;
+  font-family: var(--font-mono);
+  font-size: .74rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: .4rem .9rem;
+}
+
+.bigrama strong { color: var(--text); font-weight: 700; }
+.bigrama span { color: var(--muted); font-size: .66rem; }
+
+.lab-table-wrap {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  margin-bottom: 1.4rem;
+}
+
+.lab-table-wrap summary {
+  cursor: pointer;
+  padding: 1rem 1.4rem;
+  font-family: var(--font-mono);
+  font-size: .74rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.lab-table-scroll { overflow-x: auto; padding: 0 1.4rem 1.2rem; }
+
+.lab-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .78rem;
+}
+
+.lab-table th, .lab-table td {
+  text-align: left;
+  padding: .55rem .8rem .55rem 0;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.lab-table th {
+  font-family: var(--font-mono);
+  font-size: .62rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.lab-table td { color: var(--body); }
+
+.lab-foot {
+  font-family: var(--font-mono);
+  font-size: .68rem;
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 72ch;
+}
+
+.lab-tip {
+  position: fixed;
+  z-index: 3000;
+  background: var(--bg-deep);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: .6rem .75rem;
+  pointer-events: none;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, .5);
+  max-width: 300px;
+}
+
+.lab-tip-row {
+  display: flex;
+  align-items: baseline;
+  gap: .45rem;
+  font-size: .76rem;
+  line-height: 1.6;
+}
+
+.lab-tip-row strong { color: var(--text); font-weight: 700; }
+.lab-tip-row span { color: var(--muted); font-size: .7rem; }
+
+.lab-tip-key {
+  flex: none;
+  width: 10px;
+  height: 3px;
+  border-radius: 2px;
+  align-self: center;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+@media (max-width: 760px) {
+  .tiles { grid-template-columns: 1fr 1fr; }
+}
+
 /* ---------- HUD do shuttle J·K·L ---------- */
 
 .shuttle-hud {
