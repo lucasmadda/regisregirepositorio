@@ -14,6 +14,7 @@
 
   var tcEl = document.getElementById("timecode");
   var monitorTcEl = document.getElementById("monitor-tc");
+  var duoTcEl = document.getElementById("duo-tc");
   var barEl = document.getElementById("progressbar");
   var FILM_SECONDS = 8 * 60;
 
@@ -31,6 +32,7 @@
       var tc = "00:" + pad(m) + ":" + pad(s) + ":" + pad(frames);
       if (tcEl) { tcEl.textContent = tc; }
       if (monitorTcEl) { monitorTcEl.textContent = tc; }
+      if (duoTcEl) { duoTcEl.textContent = tc; }
     }
     if (barEl) { barEl.style.width = (p * 100).toFixed(2) + "%"; }
   }
@@ -51,6 +53,33 @@
     if (sec) { navMap[id] = a; }
   });
 
+  /* monitor "programa": a cena atual reproduzida na coluna sticky */
+  var duoScreen = document.getElementById("duo-screen");
+  var duoCena = document.getElementById("duo-cena");
+  var duoTitle = document.getElementById("duo-title");
+  var duoTrack = document.getElementById("duo-track");
+  var DUO_SCENES = {
+    sobre:       { num: "CENA 01", title: "Sobre",       track: "MASTER",             color: "var(--violet)" },
+    timeline:    { num: "CENA 02", title: "Timeline",    track: "V1 · V2 · V3 · A1",  color: "var(--violet)" },
+    experiencia: { num: "CENA 03", title: "Experiência", track: "V1 · Coordenação",   color: "var(--rec)" },
+    formacao:    { num: "CENA 04", title: "Formação",    track: "V2 · Roteiro",       color: "var(--amber)" },
+    publicacoes: { num: "CENA 05", title: "Publicações", track: "V3 · Edição",        color: "var(--teal)" },
+    medium:      { num: "CENA 06", title: "Ex-TV Nerd",  track: "A1 · Curadoria",     color: "var(--violet)" }
+  };
+
+  function duoShow(id) {
+    var scene = DUO_SCENES[id];
+    if (!scene || !duoScreen) { return; }
+    if (duoCena.textContent === scene.num) { return; }
+    duoCena.textContent = scene.num;
+    duoTitle.textContent = scene.title;
+    duoTrack.textContent = scene.track;
+    duoScreen.style.setProperty("--duo-c", scene.color);
+    duoScreen.classList.remove("cut");
+    void duoScreen.offsetWidth; /* reinicia a animação de corte */
+    duoScreen.classList.add("cut");
+  }
+
   if ("IntersectionObserver" in window) {
     var spy = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
@@ -58,6 +87,7 @@
         navLinks.forEach(function (l) { l.classList.remove("active"); });
         var link = navMap[entry.target.id];
         if (link) { link.classList.add("active"); }
+        duoShow(entry.target.id);
       });
     }, { rootMargin: "-40% 0px -55% 0px", threshold: 0 });
 
