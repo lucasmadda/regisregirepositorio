@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Régis Regi — Protótipo minimalista</title>
+  <meta name="description" content="Protótipo de layout minimalista para o portfólio de Régis Regi.">
+  <meta name="theme-color" content="#000000">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* ============================================================
+       PROTÓTIPO · minimalismo disruptivo
+       Preto absoluto. O trabalho vira índice tipográfico gigante.
+       Um único acento violeta. Movimento: um "corte" (wipe) por bloco.
+       ============================================================ */
+
+    :root {
+      --bg: #000000;
+      --ink: #f4f2f8;
+      --dim: #7d7688;      /* metadados, mono */
+      --line: #1a1720;
+      --accent: #a48bff;   /* único acento; usado com parcimônia */
+
+      --display: "Anton", "Arial Narrow", sans-serif;
+      --body: "Archivo", "Helvetica Neue", sans-serif;
+      --mono: "Space Mono", "Courier New", monospace;
+
+      --edge: clamp(1.5rem, 6vw, 6rem);   /* margem lateral generosa */
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * , *::before, *::after { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--body);
+      font-size: 1rem;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3 { margin: 0; font-weight: 400; }
+    p { margin: 0; }
+    a { color: inherit; }
+    ul { margin: 0; padding: 0; list-style: none; }
+
+    ::selection { background: var(--accent); color: #000; }
+
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    .skip {
+      position: absolute;
+      left: -999px; top: 0;
+      background: var(--accent); color: #000;
+      font-family: var(--mono); font-size: .8rem;
+      padding: .5rem .9rem; z-index: 50;
+    }
+    .skip:focus { left: 8px; top: 8px; }
+
+    .mono {
+      font-family: var(--mono);
+      font-size: .72rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+
+    .visually-hidden {
+      position: absolute; width: 1px; height: 1px;
+      overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
+    }
+
+    /* granulação de filme, quase imperceptível: o único "material" */
+    .grain {
+      position: fixed; inset: 0; z-index: 40;
+      pointer-events: none; opacity: .035;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* ---------- índice fixo de cena (rail minúsculo) ---------- */
+
+    .rail {
+      position: fixed;
+      left: clamp(.75rem, 2vw, 1.6rem);
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 30;
+      display: flex;
+      flex-direction: column;
+      gap: .9rem;
+    }
+    .rail a {
+      font-family: var(--mono);
+      font-size: .64rem;
+      letter-spacing: .1em;
+      color: var(--dim);
+      text-decoration: none;
+      opacity: .5;
+      transition: opacity .3s var(--ease), color .3s var(--ease);
+    }
+    .rail a::before {
+      content: "";
+      display: inline-block;
+      width: 14px; height: 1px;
+      margin-right: .5rem;
+      vertical-align: middle;
+      background: currentColor;
+      transition: width .3s var(--ease);
+    }
+    .rail a.on { opacity: 1; color: var(--accent); }
+    .rail a.on::before { width: 26px; }
+    @media (max-width: 720px) { .rail { display: none; } }
+
+    /* ---------- topo minimal ---------- */
+
+    .top {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 30;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.4rem var(--edge);
+      mix-blend-mode: difference;   /* o wordmark vive sobre qualquer fundo */
+    }
+    .top .wm {
+      font-family: var(--mono); font-weight: 700;
+      font-size: .8rem; letter-spacing: .24em; text-transform: uppercase;
+      color: #fff; text-decoration: none;
+    }
+    .top .cv {
+      font-family: var(--mono); font-weight: 700;
+      font-size: .72rem; letter-spacing: .12em; text-transform: uppercase;
+      color: #fff; text-decoration: none;
+      border-bottom: 1px solid #fff; padding-bottom: 2px;
+    }
+
+    /* ---------- hero: puro vazio + nome que sangra a borda ---------- */
+
+    .hero {
+      min-height: 100svh;
+      display: flex; flex-direction: column; justify-content: center;
+      padding: clamp(5rem, 12vh, 8rem) var(--edge) clamp(3rem, 8vh, 6rem);
+    }
+    .hero-eyebrow {
+      display: flex; gap: 1.5rem; flex-wrap: wrap;
+      margin-bottom: clamp(2rem, 5vh, 3.2rem);
+    }
+    .hero-name {
+      font-family: var(--display);
+      /* gigante, sangra a margem à direita */
+      font-size: clamp(4rem, 15vw, 15rem);
+      line-height: .86;
+      letter-spacing: -.01em;
+      text-transform: uppercase;
+      margin-left: -.05em;   /* alinha a haste óptica à margem */
+    }
+    .hero-name .accent { color: var(--accent); }
+    .hero-foot {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      gap: 2rem; flex-wrap: wrap;
+      margin-top: clamp(1.5rem, 4vh, 3rem);
+      border-top: 1px solid var(--line);
+      padding-top: 1.4rem;
+    }
+    .hero-foot p {
+      max-width: 46ch;
+      font-size: clamp(.95rem, 1.3vw, 1.1rem);
+      color: var(--ink);
+    }
+    .hero-scroll { white-space: nowrap; }
+
+    /* ---------- blocos: cada seção é um "corte" ---------- */
+
+    section { padding: clamp(5rem, 14vh, 12rem) var(--edge); }
+
+    .head {
+      display: flex; align-items: baseline; gap: 1.2rem;
+      margin-bottom: clamp(2.5rem, 6vh, 5rem);
+    }
+    .head .n { font-family: var(--mono); font-size: .8rem; color: var(--accent); }
+    .head h2 {
+      font-family: var(--display);
+      font-size: clamp(2.2rem, 6vw, 5rem);
+      line-height: 1; text-transform: uppercase; letter-spacing: -.01em;
+    }
+
+    /* wipe de corte: o bloco entra por trás de uma máscara que abre */
+    .cut { position: relative; }
+    .cut > * {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .8s var(--ease), transform .8s var(--ease);
+    }
+    .cut.in > * { opacity: 1; transform: none; }
+
+    /* ---------- sobre: texto largo, respirando ---------- */
+
+    .about {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: clamp(1.5rem, 3vw, 3rem);
+      max-width: 60ch;
+      font-size: clamp(1.1rem, 1.7vw, 1.5rem);
+      line-height: 1.5;
+      color: var(--ink);
+    }
+    .about .lede { color: var(--ink); }
+    .about .rest { color: var(--dim); font-size: .9em; }
+
+    /* ---------- índice de trabalho: o coração ---------- */
+
+    .work { border-top: 1px solid var(--line); }
+
+    .row {
+      display: grid;
+      grid-template-columns: 3rem 1fr auto;
+      align-items: baseline;
+      gap: 1.5rem;
+      padding: clamp(1.1rem, 2.5vh, 2rem) 0;
+      border-bottom: 1px solid var(--line);
+      cursor: pointer;
+      position: relative;
+    }
+    .row-idx { font-family: var(--mono); font-size: .72rem; color: var(--dim); }
+    .row-name {
+      font-family: var(--display);
+      font-size: clamp(1.6rem, 4.5vw, 3.4rem);
+      line-height: .95;
+      text-transform: uppercase;
+      letter-spacing: -.01em;
+      color: var(--ink);
+      transition: color .3s var(--ease), transform .4s var(--ease);
+    }
+    .row-meta {
+      font-family: var(--mono); font-size: .7rem; letter-spacing: .06em;
+      text-transform: uppercase; color: var(--dim); text-align: right;
+      white-space: nowrap;
+    }
+    /* faixa violeta que "risca" a linha no hover, como marcar um clipe */
+    .row::after {
+      content: ""; position: absolute; left: 0; bottom: -1px;
+      height: 1px; width: 0; background: var(--accent);
+      transition: width .45s var(--ease);
+    }
+    .row:hover .row-name,
+    .row:focus-within .row-name { color: var(--accent); transform: translateX(.4rem); }
+    .row:hover::after,
+    .row:focus-within::after { width: 100%; }
+
+    /* painel expansível inline: metadados do trabalho */
+    .row-toggle {
+      all: unset; position: absolute; inset: 0; cursor: pointer;
+    }
+    .row-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: -4px; }
+    .panel {
+      grid-column: 1 / -1;
+      display: grid; grid-template-rows: 0fr;
+      transition: grid-template-rows .5s var(--ease);
+    }
+    .panel > div { overflow: hidden; }
+    .row.open .panel { grid-template-rows: 1fr; }
+    .panel-inner {
+      padding: 1.4rem 0 .4rem;
+      display: grid; grid-template-columns: 1fr;
+      gap: .8rem;
+      max-width: 68ch;
+    }
+    .panel-inner p { color: var(--dim); font-size: .98rem; line-height: 1.6; }
+    .panel-inner .tagline { color: var(--accent); font-family: var(--mono); font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; }
+    .panel-inner strong { color: var(--ink); font-weight: 600; }
+
+    /* ---------- competências: colunas secas ---------- */
+
+    .cols {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: clamp(1.5rem, 4vw, 3.5rem);
+    }
+    .col h3 {
+      font-family: var(--mono); font-size: .72rem; letter-spacing: .16em;
+      text-transform: uppercase; color: var(--accent);
+      padding-bottom: 1rem; margin-bottom: 1rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .col li { color: var(--dim); font-size: .95rem; padding: .35rem 0; }
+
+    /* ---------- contato: CTA gigante ---------- */
+
+    .end {
+      min-height: 90svh;
+      display: flex; flex-direction: column; justify-content: center;
+      padding: clamp(4rem, 10vh, 9rem) var(--edge);
+    }
+    .end-big {
+      font-family: var(--display);
+      font-size: clamp(3rem, 13vw, 12rem);
+      line-height: .85; text-transform: uppercase; letter-spacing: -.02em;
+    }
+    .end a.mail {
+      color: var(--accent); text-decoration: none;
+      border-bottom: 2px solid transparent; transition: border-color .3s var(--ease);
+    }
+    .end a.mail:hover { border-color: var(--accent); }
+    .end-links {
+      display: flex; gap: 2rem; flex-wrap: wrap;
+      margin-top: clamp(2rem, 5vh, 3.5rem);
+      font-family: var(--mono); font-size: .78rem; letter-spacing: .06em;
+    }
+    .end-links a { color: var(--dim); text-decoration: none; transition: color .3s var(--ease); }
+    .end-links a:hover { color: var(--ink); }
+
+    .foot {
+      display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+      padding: 2rem var(--edge);
+      border-top: 1px solid var(--line);
+      font-family: var(--mono); font-size: .64rem; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--dim);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .cut > * { opacity: 1; transform: none; transition: none; }
+      .row-name { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#trabalho">Pular para o trabalho</a>
+  <div class="grain" aria-hidden="true"></div>
+
+  <nav class="rail" aria-label="Índice de cenas">
+    <a href="#sobre" data-sec="sobre">01</a>
+    <a href="#trabalho" data-sec="trabalho">02</a>
+    <a href="#competencias" data-sec="competencias">03</a>
+    <a href="#escrita" data-sec="escrita">04</a>
+    <a href="#contato" data-sec="contato">05</a>
+  </nav>
+
+  <header class="top">
+    <a class="wm" href="#top">Régis Regi</a>
+    <a class="cv" href="assets/RE_GIS_REGI_PORTFOLIO_CV_2026.pdf" download>Baixar CV</a>
+  </header>
+
+  <main id="top">
+
+    <!-- HERO -->
+    <section class="hero" aria-label="Abertura">
+      <div class="hero-eyebrow">
+        <span class="mono">Rio de Janeiro</span>
+        <span class="mono">Pós-produção · Roteiro · Curadoria</span>
+        <span class="mono">2018 — hoje</span>
+      </div>
+      <h1 class="hero-name">Régis<br>Re<span class="accent">g</span>i</h1>
+      <div class="hero-foot">
+        <p>Coordenador de pós-produção, editor, roteirista e curador. Oito anos entre streamings globais e a cena independente, do conform de originais para Netflix e Paramount+ à curadoria da eletrônica underground carioca.</p>
+        <span class="mono hero-scroll">↓ Role</span>
+      </div>
+    </section>
+
+    <!-- 01 SOBRE -->
+    <section id="sobre">
+      <div class="head"><span class="n">01</span><h2>Sobre</h2></div>
+      <div class="about cut">
+        <p class="lede">Profissional multidisciplinar do audiovisual, de streamings globais a iniciativas independentes: pós-produção, edição criativa, roteiro de formatos originais e curadoria de conteúdo.</p>
+        <p class="rest">Formação em Cinema (UFF) e especialização em Roteiro (AIC), somadas a um perfil técnico, estético e estratégico. No fluxo de trabalho, ferramentas de IA entram como aceleradores da pós: transcrição e decupagem automatizadas, edição baseada em texto e controle de qualidade assistido, sempre a serviço do padrão técnico e da narrativa.</p>
+      </div>
+    </section>
+
+    <!-- 02 TRABALHO -->
+    <section id="trabalho">
+      <div class="head"><span class="n">02</span><h2>Trabalho selecionado</h2></div>
+      <ul class="work cut">
+
+        <li class="row">
+          <button class="row-toggle" aria-expanded="false" aria-controls="p-mellin"><span class="visually-hidden">Abrir Mellin Studio</span></button>
+          <span class="row-idx">01</span>
+          <span class="row-name">Mellin Studio</span>
+          <span class="row-meta">Coord. de Pós · 2025—hoje</span>
+          <div class="panel" id="p-mellin"><div><div class="panel-inner">
+            <span class="tagline">Canal OFF · branded content</span>
+            <p>Supervisão dos fluxos de pós de séries documentais e programas lifestyle, alinhados aos padrões do Canal OFF, e organização da edição e finalização de campanhas para <strong>Banco C6</strong>, <strong>Cerveja Praya</strong> e <strong>BSC</strong>.</p>
+          </div></div></div>
+        </li>
+
+        <li class="row">
+          <button class="row-toggle" aria-expanded="false" aria-controls="p-fabrica"><span class="visually-hidden">Abrir A Fábrica</span></button>
+          <span class="row-idx">02</span>
+          <span class="row-name">A Fábrica</span>
+          <span class="row-meta">Coord. de Pós · 2025</span>
+          <div class="panel" id="p-fabrica"><div><div class="panel-inner">
+            <span class="tagline">Séries e longas nacionais</span>
+            <p>Ciclo de vida completo de séries e longas como <strong>Galera FC</strong> e <strong>Agentes Muito Especiais</strong>: cronograma macro, controle orçamentário, gestão de ativos e interface entre produção executiva e áreas técnicas.</p>
+          </div></div></div>
+        </li>
+
+        <li class="row">
+          <button class="row-toggle" aria-expanded="false" aria-controls="p-dot"><span class="visually-hidden">Abrir DOT Cine</span></button>
+          <span class="row-idx">03</span>
+          <span class="row-name">DOT Cine</span>
+          <span class="row-meta">Coord. de Pós · 2023—24</span>
+          <div class="panel" id="p-dot"><div><div class="panel-inner">
+            <span class="tagline">Netflix · Disney+ · Star+ · Max</span>
+            <p>Gestão do fluxo de materiais e entregáveis para players globais em <strong>Bom Dia, Verônica</strong>, <strong>A Magia de Aruna</strong>, <strong>Desejos S.A.</strong> e <strong>Luva de Pedreiro</strong>, cumprindo specs técnicas internacionais, com QC e conform.</p>
+          </div></div></div>
+        </li>
+
+        <li class="row">
+          <button class="row-toggle" aria-expanded="false" aria-controls="p-porta"><span class="visually-hidden">Abrir Porta dos Fundos</span></button>
+          <span class="row-idx">04</span>
+          <span class="row-name">Porta dos Fundos</span>
+          <span class="row-meta">Coord. de Pós · 2022—23</span>
+          <div class="panel" id="p-porta"><div><div class="panel-inner">
+            <span class="tagline">Humor · multiplataforma</span>
+            <p>Operação de entrega semanal de esquetes para múltiplas plataformas: coordenação de equipes de edição, motion e finalização, fluxos integrados entre criação, produção e pós, e relatórios de QC.</p>
+          </div></div></div>
+        </li>
+
+        <li class="row">
+          <button class="row-toggle" aria-expanded="false" aria-controls="p-para"><span class="visually-hidden">Abrir Paramount+</span></button>
+          <span class="row-idx">05</span>
+          <span class="row-name">Paramount+</span>
+          <span class="row-meta">Assist. Coord. · 2021—22</span>
+          <div class="panel" id="p-para"><div><div class="panel-inner">
+            <span class="tagline">Originais brasileiros</span>
+            <p><strong>As Seguidoras</strong>, primeira ficção original da Paramount+ no Brasil: conform em todas as etapas e integração de telas na narrativa. <strong>Coração Suburbano</strong>: conformação, revisão técnica e padronização das entregas.</p>
+          </div></div></div>
+        </li>
+
+        <li class="row">
+          <button class="row-toggle" aria-expanded="false" aria-controls="p-mara"><span class="visually-hidden">Abrir Maracutaia.fm</span></button>
+          <span class="row-idx">06</span>
+          <span class="row-name">Maracutaia.fm</span>
+          <span class="row-meta">Curadoria · 2025—hoje</span>
+          <div class="panel" id="p-mara"><div><div class="panel-inner">
+            <span class="tagline">Cena eletrônica underground carioca</span>
+            <p>Curadoria musical e visual de sets audiovisuais, edição e finalização para YouTube e criação de peças promocionais, consolidando a identidade da marca.</p>
+          </div></div></div>
+        </li>
+
+      </ul>
+    </section>
+
+    <!-- 03 COMPETÊNCIAS -->
+    <section id="competencias">
+      <div class="head"><span class="n">03</span><h2>Competências</h2></div>
+      <div class="cols cut">
+        <div class="col">
+          <h3>Edição &amp; finalização</h3>
+          <ul><li>DaVinci Resolve</li><li>Adobe Premiere Pro</li><li>Conform técnico</li><li>Organização de mídias</li></ul>
+        </div>
+        <div class="col">
+          <h3>Operação &amp; gestão</h3>
+          <ul><li>Cronograma macro</li><li>Gestão de ativos</li><li>Padronização de pipeline</li><li>Padrões de streaming</li></ul>
+        </div>
+        <div class="col">
+          <h3>Conteúdo &amp; editorial</h3>
+          <ul><li>Roteiro de formatos</li><li>Promos</li><li>Curadoria</li><li>Escrita crítica</li></ul>
+        </div>
+        <div class="col">
+          <h3>IA no audiovisual</h3>
+          <ul><li>Transcrição e decupagem</li><li>Edição baseada em texto</li><li>QC assistido</li><li>NLP aplicado</li></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 ESCRITA -->
+    <section id="escrita">
+      <div class="head"><span class="n">04</span><h2>Escrita</h2></div>
+      <ul class="work cut">
+        <li class="row">
+          <a class="row-toggle" href="https://extvnerd.medium.com" target="_blank" rel="noopener" aria-label="Ex-TV Nerd no Medium"></a>
+          <span class="row-idx">↗</span>
+          <span class="row-name">Ex-TV Nerd</span>
+          <span class="row-meta">Medium · crítica de TV</span>
+        </li>
+        <li class="row">
+          <a class="row-toggle" href="https://www.academia.edu/36102539/HBO_e_a_Ruptura_do_Discurso_de_Diferencia%C3%A7%C3%A3o_o_caso_Enlightened_" target="_blank" rel="noopener" aria-label="Artigo sobre a HBO"></a>
+          <span class="row-idx">↗</span>
+          <span class="row-name">HBO &amp; Enlightened</span>
+          <span class="row-meta">Artigo · TV de qualidade</span>
+        </li>
+      </ul>
+    </section>
+
+    <!-- 05 CONTATO -->
+    <section class="end" id="contato">
+      <h2 class="end-big">Vamos<br><a class="mail" href="mailto:regispereiraregi@gmail.com">conversar.</a></h2>
+      <div class="end-links">
+        <a href="mailto:regispereiraregi@gmail.com">regispereiraregi@gmail.com</a>
+        <a href="https://www.linkedin.com/in/regisregi" target="_blank" rel="noopener">LinkedIn ↗</a>
+        <a href="https://wa.me/5521969470476" target="_blank" rel="noopener">WhatsApp ↗</a>
+        <a href="assets/RE_GIS_REGI_PORTFOLIO_CV_2026.pdf" download>CV em PDF ↓</a>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <span>© 2026 Régis Regi · Rio de Janeiro</span>
+      <span>Protótipo minimalista</span>
+    </footer>
+
+  </main>
+
+  <script>
+    (function () {
+      "use strict";
+      var reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      /* corte: cada bloco entra quando aparece */
+      var cuts = document.querySelectorAll(".cut");
+      if ("IntersectionObserver" in window) {
+        var io = new IntersectionObserver(function (es) {
+          es.forEach(function (e) {
+            if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+          });
+        }, { threshold: 0.15, rootMargin: "0px 0px -8% 0px" });
+        cuts.forEach(function (c) { io.observe(c); });
+      } else {
+        cuts.forEach(function (c) { c.classList.add("in"); });
+      }
+
+      /* rail: cena ativa */
+      var railLinks = {};
+      document.querySelectorAll(".rail a").forEach(function (a) {
+        railLinks[a.dataset.sec] = a;
+      });
+      if ("IntersectionObserver" in window) {
+        var spy = new IntersectionObserver(function (es) {
+          es.forEach(function (e) {
+            if (!e.isIntersecting) { return; }
+            Object.values(railLinks).forEach(function (a) { a.classList.remove("on"); });
+            var link = railLinks[e.target.id];
+            if (link) { link.classList.add("on"); }
+          });
+        }, { rootMargin: "-45% 0px -50% 0px" });
+        ["sobre", "trabalho", "competencias", "escrita", "contato"].forEach(function (id) {
+          var el = document.getElementById(id);
+          if (el) { spy.observe(el); }
+        });
+      }
+
+      /* linhas do índice: expandir metadados inline */
+      document.querySelectorAll(".row .row-toggle").forEach(function (btn) {
+        if (btn.tagName !== "BUTTON") { return; }  /* âncoras externas ficam de fora */
+        btn.addEventListener("click", function () {
+          var row = btn.closest(".row");
+          var open = row.classList.toggle("open");
+          btn.setAttribute("aria-expanded", open ? "true" : "false");
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
