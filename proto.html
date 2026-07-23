@@ -3,326 +3,241 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Régis Regi · Protótipo minimalista</title>
-  <meta name="description" content="Protótipo de layout minimalista para o portfólio de Régis Regi.">
+  <title>Régis Regi · Pós-Produção, Roteiro e Curadoria</title>
+  <meta name="description" content="Régis Regi é coordenador de pós-produção, editor, roteirista e curador no Rio de Janeiro. Oito anos de audiovisual, com produções na Netflix, Disney+, Star+, Max, Paramount+ e Porta dos Fundos.">
+  <meta property="og:title" content="Régis Regi · Pós-Produção, Roteiro e Curadoria">
+  <meta property="og:description" content="Oito anos de audiovisual entre streamings globais e projetos independentes. Coordenação de pós, roteiro de formatos, edição e curadoria.">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
   <meta name="theme-color" content="#000000">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Google Analytics 4 · para ativar: crie a propriedade em analytics.google.com,
+       troque G-XXXXXXXXXX pelo ID de medição real e descomente o bloco abaixo.
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX', { anonymize_ip: true });
+  </script>
+  -->
   <style>
     /* ============================================================
-       PROTÓTIPO · minimalismo disruptivo
+       RÉGIS REGI · portfólio minimalista
        Preto absoluto. O trabalho vira índice tipográfico gigante.
-       Um único acento violeta. Movimento: um "corte" (wipe) por bloco.
+       Um único acento violeta. Movimento: um "corte" por bloco.
        ============================================================ */
 
     :root {
       --bg: #000000;
       --ink: #f4f2f8;
-      --dim: #7d7688;      /* metadados, mono */
-      --line: #1a1720;
-      --accent: #a48bff;   /* único acento; usado com parcimônia */
+      --dim: #7d7688;
+      --line: #1c1826;
+      --accent: #a48bff;
 
       --display: "Anton", "Arial Narrow", sans-serif;
       --body: "Archivo", "Helvetica Neue", sans-serif;
       --mono: "Space Mono", "Courier New", monospace;
 
-      --edge: clamp(1.5rem, 6vw, 6rem);   /* margem lateral generosa */
+      --edge: clamp(1.5rem, 6vw, 6rem);
       --ease: cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     * , *::before, *::after { box-sizing: border-box; }
-
     html { scroll-behavior: smooth; }
-
     body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--ink);
-      font-family: var(--body);
-      font-size: 1rem;
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
+      margin: 0; background: var(--bg); color: var(--ink);
+      font-family: var(--body); font-size: 1rem; line-height: 1.6;
+      -webkit-font-smoothing: antialiased; overflow-x: hidden;
     }
-
     h1, h2, h3 { margin: 0; font-weight: 400; }
     p { margin: 0; }
     a { color: inherit; }
     ul { margin: 0; padding: 0; list-style: none; }
-
+    dl, dt, dd { margin: 0; }
     ::selection { background: var(--accent); color: #000; }
-
-    :focus-visible {
-      outline: 2px solid var(--accent);
-      outline-offset: 3px;
-    }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
     .skip {
-      position: absolute;
-      left: -999px; top: 0;
+      position: absolute; left: -999px; top: 0;
       background: var(--accent); color: #000;
-      font-family: var(--mono); font-size: .8rem;
-      padding: .5rem .9rem; z-index: 50;
+      font-family: var(--mono); font-size: .8rem; padding: .5rem .9rem; z-index: 50;
     }
     .skip:focus { left: 8px; top: 8px; }
 
     .mono {
-      font-family: var(--mono);
-      font-size: .72rem;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      color: var(--dim);
+      font-family: var(--mono); font-size: .72rem; letter-spacing: .18em;
+      text-transform: uppercase; color: var(--dim);
     }
-
     .visually-hidden {
       position: absolute; width: 1px; height: 1px;
       overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
     }
 
-    /* granulação de filme, quase imperceptível: o único "material" */
     .grain {
-      position: fixed; inset: 0; z-index: 40;
-      pointer-events: none; opacity: .035;
+      position: fixed; inset: 0; z-index: 40; pointer-events: none; opacity: .03;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
     }
 
-    /* ---------- índice fixo de cena (rail minúsculo) ---------- */
-
+    /* ---------- rail de cena ---------- */
     .rail {
-      position: fixed;
-      left: clamp(.75rem, 2vw, 1.6rem);
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 30;
-      display: flex;
-      flex-direction: column;
-      gap: .9rem;
+      position: fixed; left: clamp(.75rem, 2vw, 1.6rem); top: 50%;
+      transform: translateY(-50%); z-index: 30;
+      display: flex; flex-direction: column; gap: .9rem;
     }
     .rail a {
-      font-family: var(--mono);
-      font-size: .64rem;
-      letter-spacing: .1em;
-      color: var(--dim);
-      text-decoration: none;
-      opacity: .5;
+      font-family: var(--mono); font-size: .64rem; letter-spacing: .1em;
+      color: var(--dim); text-decoration: none; opacity: .5;
       transition: opacity .3s var(--ease), color .3s var(--ease);
     }
     .rail a::before {
-      content: "";
-      display: inline-block;
-      width: 14px; height: 1px;
-      margin-right: .5rem;
-      vertical-align: middle;
-      background: currentColor;
+      content: ""; display: inline-block; width: 14px; height: 1px;
+      margin-right: .5rem; vertical-align: middle; background: currentColor;
       transition: width .3s var(--ease);
     }
     .rail a.on { opacity: 1; color: var(--accent); }
     .rail a.on::before { width: 26px; }
-    @media (max-width: 720px) { .rail { display: none; } }
+    @media (max-width: 860px) { .rail { display: none; } }
 
-    /* ---------- topo minimal ---------- */
-
+    /* ---------- topo ---------- */
     .top {
       position: fixed; top: 0; left: 0; right: 0; z-index: 30;
       display: flex; align-items: center; justify-content: space-between;
-      padding: 1.4rem var(--edge);
-      mix-blend-mode: difference;   /* o wordmark vive sobre qualquer fundo */
+      padding: 1.4rem var(--edge); mix-blend-mode: difference;
     }
     .top .wm {
-      font-family: var(--mono); font-weight: 700;
-      font-size: .8rem; letter-spacing: .24em; text-transform: uppercase;
-      color: #fff; text-decoration: none;
+      font-family: var(--mono); font-weight: 700; font-size: .8rem;
+      letter-spacing: .24em; text-transform: uppercase; color: #fff; text-decoration: none;
     }
     .top .cv {
-      font-family: var(--mono); font-weight: 700;
-      font-size: .72rem; letter-spacing: .12em; text-transform: uppercase;
-      color: #fff; text-decoration: none;
-      border-bottom: 1px solid #fff; padding-bottom: 2px;
+      font-family: var(--mono); font-weight: 700; font-size: .72rem;
+      letter-spacing: .12em; text-transform: uppercase; color: #fff;
+      text-decoration: none; border-bottom: 1px solid #fff; padding-bottom: 2px;
     }
 
-    /* ---------- hero: puro vazio + nome que sangra a borda ---------- */
-
+    /* ---------- hero ---------- */
     .hero {
-      min-height: 100svh;
-      display: flex; flex-direction: column; justify-content: center;
-      padding: clamp(5rem, 12vh, 8rem) var(--edge) clamp(3rem, 8vh, 6rem);
+      min-height: 100svh; display: flex; flex-direction: column; justify-content: center;
+      padding: clamp(5rem, 12vh, 8rem) var(--edge) clamp(2.5rem, 6vh, 4rem);
     }
     .hero-eyebrow {
       display: flex; gap: 1.5rem; flex-wrap: wrap;
       margin-bottom: clamp(2rem, 5vh, 3.2rem);
     }
     .hero-name {
-      font-family: var(--display);
-      /* gigante, sangra a margem à direita */
-      font-size: clamp(4rem, 15vw, 15rem);
-      line-height: .86;
-      letter-spacing: -.01em;
-      text-transform: uppercase;
-      margin-left: -.05em;   /* alinha a haste óptica à margem */
+      font-family: var(--display); font-size: clamp(4rem, 15vw, 15rem);
+      line-height: .86; letter-spacing: -.01em; text-transform: uppercase; margin-left: -.05em;
     }
     .hero-name .accent { color: var(--accent); }
     .hero-foot {
       display: flex; justify-content: space-between; align-items: flex-end;
-      gap: 2rem; flex-wrap: wrap;
-      margin-top: clamp(1.5rem, 4vh, 3rem);
-      border-top: 1px solid var(--line);
-      padding-top: 1.4rem;
+      gap: 2rem; flex-wrap: wrap; margin-top: clamp(1.5rem, 4vh, 3rem);
+      border-top: 1px solid var(--line); padding-top: 1.4rem;
     }
-    .hero-foot p {
-      max-width: 46ch;
-      font-size: clamp(.95rem, 1.3vw, 1.1rem);
-      color: var(--ink);
-    }
+    .hero-foot p { max-width: 46ch; font-size: clamp(.95rem, 1.3vw, 1.1rem); color: var(--ink); }
     .hero-scroll { white-space: nowrap; }
 
-    /* ---------- blocos: cada seção é um "corte" ---------- */
-
-    section { padding: clamp(5rem, 14vh, 12rem) var(--edge); }
-
-    .head {
-      display: flex; align-items: baseline; gap: 1.2rem;
-      margin-bottom: clamp(2.5rem, 6vh, 5rem);
+    /* ---------- estatísticas ---------- */
+    .stats-band { padding: 0 var(--edge) clamp(3rem, 8vh, 6rem); }
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); }
+    .stat { display: flex; flex-direction: column; padding: clamp(1.4rem, 3vw, 2.4rem) 1rem clamp(.4rem, 2vw, 1rem) 0; }
+    .stat + .stat { padding-left: clamp(1rem, 2vw, 2rem); border-left: 1px solid var(--line); }
+    .stat dd { font-family: var(--display); font-size: clamp(2.6rem, 6vw, 4.6rem); line-height: 1; color: var(--ink); order: -1; }
+    .stat dt { font-family: var(--mono); font-size: .64rem; letter-spacing: .14em; text-transform: uppercase; color: var(--dim); margin-top: .7rem; }
+    @media (max-width: 720px) {
+      .stats { grid-template-columns: 1fr 1fr; }
+      .stat:nth-child(odd) { border-left: none; padding-left: 0; }
+      .stat:nth-child(n+3) { border-top: 1px solid var(--line); }
     }
+
+    /* ---------- blocos ---------- */
+    section { padding: clamp(5rem, 14vh, 11rem) var(--edge); }
+    .head { display: flex; align-items: baseline; gap: 1.2rem; margin-bottom: clamp(2.5rem, 6vh, 4.5rem); }
     .head .n { font-family: var(--mono); font-size: .8rem; color: var(--accent); }
     .head h2 {
-      font-family: var(--display);
-      font-size: clamp(2.2rem, 6vw, 5rem);
+      font-family: var(--display); font-size: clamp(2.2rem, 6vw, 5rem);
       line-height: 1; text-transform: uppercase; letter-spacing: -.01em;
     }
 
-    /* wipe de corte: o bloco entra por trás de uma máscara que abre */
-    .cut { position: relative; }
-    .cut > * {
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity .8s var(--ease), transform .8s var(--ease);
-    }
+    .cut > * { opacity: 0; transform: translateY(24px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
     .cut.in > * { opacity: 1; transform: none; }
 
-    /* ---------- sobre: texto largo, respirando ---------- */
-
+    /* ---------- sobre ---------- */
     .about {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: clamp(1.5rem, 3vw, 3rem);
-      max-width: 60ch;
-      font-size: clamp(1.1rem, 1.7vw, 1.5rem);
-      line-height: 1.5;
-      color: var(--ink);
+      display: grid; gap: clamp(1.5rem, 3vw, 3rem); max-width: 62ch;
+      font-size: clamp(1.1rem, 1.7vw, 1.5rem); line-height: 1.5; color: var(--ink);
     }
-    .about .lede { color: var(--ink); }
     .about .rest { color: var(--dim); font-size: .9em; }
 
-    /* ---------- índice de trabalho: o coração ---------- */
-
+    /* ---------- índice de trabalho ---------- */
     .work { border-top: 1px solid var(--line); }
-
     .row {
-      display: grid;
-      grid-template-columns: 3rem 1fr auto;
-      align-items: baseline;
-      gap: 1.5rem;
-      padding: clamp(1.1rem, 2.5vh, 2rem) 0;
-      border-bottom: 1px solid var(--line);
-      cursor: pointer;
-      position: relative;
+      display: grid; grid-template-columns: 3rem 1fr auto; align-items: baseline;
+      gap: 1.5rem; padding: clamp(1.1rem, 2.5vh, 2rem) 0;
+      border-bottom: 1px solid var(--line); cursor: pointer; position: relative;
     }
     .row-idx { font-family: var(--mono); font-size: .72rem; color: var(--dim); }
     .row-name {
-      font-family: var(--display);
-      font-size: clamp(1.6rem, 4.5vw, 3.4rem);
-      line-height: .95;
-      text-transform: uppercase;
-      letter-spacing: -.01em;
-      color: var(--ink);
+      font-family: var(--display); font-size: clamp(1.6rem, 4.5vw, 3.4rem);
+      line-height: .95; text-transform: uppercase; letter-spacing: -.01em; color: var(--ink);
       transition: color .3s var(--ease), transform .4s var(--ease);
     }
     .row-meta {
       font-family: var(--mono); font-size: .7rem; letter-spacing: .06em;
-      text-transform: uppercase; color: var(--dim); text-align: right;
-      white-space: nowrap;
+      text-transform: uppercase; color: var(--dim); text-align: right; white-space: nowrap;
     }
-    /* faixa violeta que "risca" a linha no hover, como marcar um clipe */
     .row::after {
-      content: ""; position: absolute; left: 0; bottom: -1px;
-      height: 1px; width: 0; background: var(--accent);
-      transition: width .45s var(--ease);
+      content: ""; position: absolute; left: 0; bottom: -1px; height: 1px; width: 0;
+      background: var(--accent); transition: width .45s var(--ease);
     }
-    .row:hover .row-name,
-    .row:focus-within .row-name { color: var(--accent); transform: translateX(.4rem); }
-    .row:hover::after,
-    .row:focus-within::after { width: 100%; }
+    .row:hover .row-name, .row:focus-within .row-name { color: var(--accent); transform: translateX(.4rem); }
+    .row:hover::after, .row:focus-within::after { width: 100%; }
 
-    /* painel expansível inline: metadados do trabalho */
-    .row-toggle {
-      all: unset; position: absolute; inset: 0; cursor: pointer;
-    }
+    .row-toggle { all: unset; position: absolute; inset: 0; cursor: pointer; }
     .row-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: -4px; }
-    .panel {
-      grid-column: 1 / -1;
-      display: grid; grid-template-rows: 0fr;
-      transition: grid-template-rows .5s var(--ease);
-    }
+    .panel { grid-column: 1 / -1; display: grid; grid-template-rows: 0fr; transition: grid-template-rows .5s var(--ease); }
     .panel > div { overflow: hidden; }
     .row.open .panel { grid-template-rows: 1fr; }
-    .panel-inner {
-      padding: 1.4rem 0 .4rem;
-      display: grid; grid-template-columns: 1fr;
-      gap: .8rem;
-      max-width: 68ch;
-    }
+    .panel-inner { padding: 1.4rem 0 .4rem; display: grid; gap: 1rem; max-width: 70ch; }
     .panel-inner p { color: var(--dim); font-size: .98rem; line-height: 1.6; }
-    .panel-inner .tagline { color: var(--accent); font-family: var(--mono); font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; }
     .panel-inner strong { color: var(--ink); font-weight: 600; }
+    .tagline { color: var(--accent); font-family: var(--mono); font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; }
 
-    /* ---------- competências: colunas secas ---------- */
-
-    .cols {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: clamp(1.5rem, 4vw, 3.5rem);
+    /* material: hyperlinks do trabalho */
+    .mat { display: flex; flex-wrap: wrap; gap: .5rem 1.4rem; padding-top: .2rem; }
+    .mat a {
+      font-family: var(--mono); font-size: .68rem; letter-spacing: .05em;
+      text-transform: uppercase; color: var(--dim); text-decoration: none;
+      transition: color .3s var(--ease);
     }
+    .mat a::after { content: " ↗"; }
+    .mat a.dl::after { content: " ↓"; }
+    .mat a:hover { color: var(--accent); }
+
+    /* ---------- competências ---------- */
+    .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: clamp(1.5rem, 4vw, 3.5rem); }
     .col h3 {
-      font-family: var(--mono); font-size: .72rem; letter-spacing: .16em;
-      text-transform: uppercase; color: var(--accent);
-      padding-bottom: 1rem; margin-bottom: 1rem;
-      border-bottom: 1px solid var(--line);
+      font-family: var(--mono); font-size: .72rem; letter-spacing: .16em; text-transform: uppercase;
+      color: var(--accent); padding-bottom: 1rem; margin-bottom: 1rem; border-bottom: 1px solid var(--line);
     }
     .col li { color: var(--dim); font-size: .95rem; padding: .35rem 0; }
 
-    /* ---------- contato: CTA gigante ---------- */
-
-    .end {
-      min-height: 90svh;
-      display: flex; flex-direction: column; justify-content: center;
-      padding: clamp(4rem, 10vh, 9rem) var(--edge);
-    }
-    .end-big {
-      font-family: var(--display);
-      font-size: clamp(3rem, 13vw, 12rem);
-      line-height: .85; text-transform: uppercase; letter-spacing: -.02em;
-    }
-    .end a.mail {
-      color: var(--accent); text-decoration: none;
-      border-bottom: 2px solid transparent; transition: border-color .3s var(--ease);
-    }
+    /* ---------- contato ---------- */
+    .end { min-height: 88svh; display: flex; flex-direction: column; justify-content: center; padding: clamp(4rem, 10vh, 9rem) var(--edge); }
+    .end-big { font-family: var(--display); font-size: clamp(3rem, 13vw, 12rem); line-height: .85; text-transform: uppercase; letter-spacing: -.02em; }
+    .end a.mail { color: var(--accent); text-decoration: none; border-bottom: 2px solid transparent; transition: border-color .3s var(--ease); }
     .end a.mail:hover { border-color: var(--accent); }
-    .end-links {
-      display: flex; gap: 2rem; flex-wrap: wrap;
-      margin-top: clamp(2rem, 5vh, 3.5rem);
-      font-family: var(--mono); font-size: .78rem; letter-spacing: .06em;
-    }
+    .end-links { display: flex; gap: 2rem; flex-wrap: wrap; margin-top: clamp(2rem, 5vh, 3.5rem); font-family: var(--mono); font-size: .78rem; letter-spacing: .06em; }
     .end-links a { color: var(--dim); text-decoration: none; transition: color .3s var(--ease); }
     .end-links a:hover { color: var(--ink); }
 
     .foot {
       display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
-      padding: 2rem var(--edge);
-      border-top: 1px solid var(--line);
-      font-family: var(--mono); font-size: .64rem; letter-spacing: .1em;
-      text-transform: uppercase; color: var(--dim);
+      padding: 2rem var(--edge); border-top: 1px solid var(--line);
+      font-family: var(--mono); font-size: .64rem; letter-spacing: .1em; text-transform: uppercase; color: var(--dim);
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -365,18 +280,28 @@
       </div>
     </section>
 
+    <!-- ESTATÍSTICAS -->
+    <div class="stats-band" aria-label="Panorama">
+      <dl class="stats">
+        <div class="stat"><dt>Anos de audiovisual</dt><dd>08</dd></div>
+        <div class="stat"><dt>Plataformas &amp; canais</dt><dd>09</dd></div>
+        <div class="stat"><dt>Produções entregues</dt><dd>20+</dd></div>
+        <div class="stat"><dt>Frentes de atuação</dt><dd>04</dd></div>
+      </dl>
+    </div>
+
     <!-- 01 SOBRE -->
     <section id="sobre">
       <div class="head"><span class="n">01</span><h2>Sobre</h2></div>
       <div class="about cut">
-        <p class="lede">Profissional multidisciplinar do audiovisual, de streamings globais a iniciativas independentes: pós-produção, edição criativa, roteiro de formatos originais e curadoria de conteúdo.</p>
+        <p>Profissional multidisciplinar do audiovisual, de streamings globais a iniciativas independentes: pós-produção, edição criativa, roteiro de formatos originais e curadoria de conteúdo, com trabalhos para Netflix, Disney+, Star+, Max, Paramount+ e Porta dos Fundos.</p>
         <p class="rest">Formação em Cinema (UFF) e especialização em Roteiro (AIC), somadas a um perfil técnico, estético e estratégico. No fluxo de trabalho, ferramentas de IA entram como aceleradores da pós: transcrição e decupagem automatizadas, edição baseada em texto e controle de qualidade assistido, sempre a serviço do padrão técnico e da narrativa.</p>
       </div>
     </section>
 
     <!-- 02 TRABALHO -->
     <section id="trabalho">
-      <div class="head"><span class="n">02</span><h2>Trabalho selecionado</h2></div>
+      <div class="head"><span class="n">02</span><h2>Trabalho</h2></div>
       <ul class="work cut">
 
         <li class="row">
@@ -386,62 +311,151 @@
           <span class="row-meta">Coord. de Pós · 2025 → hoje</span>
           <div class="panel" id="p-mellin"><div><div class="panel-inner">
             <span class="tagline">Canal OFF · branded content</span>
-            <p>Supervisão dos fluxos de pós de séries documentais e programas lifestyle, alinhados aos padrões do Canal OFF, e organização da edição e finalização de campanhas para <strong>Banco C6</strong>, <strong>Cerveja Praya</strong> e <strong>BSC</strong>.</p>
-          </div></div></div>
-        </li>
-
-        <li class="row">
-          <button class="row-toggle" aria-expanded="false" aria-controls="p-fabrica"><span class="visually-hidden">Abrir A Fábrica</span></button>
-          <span class="row-idx">02</span>
-          <span class="row-name">A Fábrica</span>
-          <span class="row-meta">Coord. de Pós · 2025</span>
-          <div class="panel" id="p-fabrica"><div><div class="panel-inner">
-            <span class="tagline">Séries e longas nacionais</span>
-            <p>Ciclo de vida completo de séries e longas como <strong>Galera FC</strong> e <strong>Agentes Muito Especiais</strong>: cronograma macro, controle orçamentário, gestão de ativos e interface entre produção executiva e áreas técnicas.</p>
-          </div></div></div>
-        </li>
-
-        <li class="row">
-          <button class="row-toggle" aria-expanded="false" aria-controls="p-dot"><span class="visually-hidden">Abrir DOT Cine</span></button>
-          <span class="row-idx">03</span>
-          <span class="row-name">DOT Cine</span>
-          <span class="row-meta">Coord. de Pós · 2023 › 2024</span>
-          <div class="panel" id="p-dot"><div><div class="panel-inner">
-            <span class="tagline">Netflix · Disney+ · Star+ · Max</span>
-            <p>Gestão do fluxo de materiais e entregáveis para players globais em <strong>Bom Dia, Verônica</strong>, <strong>A Magia de Aruna</strong>, <strong>Desejos S.A.</strong> e <strong>Luva de Pedreiro</strong>, cumprindo specs técnicas internacionais, com QC e conform.</p>
-          </div></div></div>
-        </li>
-
-        <li class="row">
-          <button class="row-toggle" aria-expanded="false" aria-controls="p-porta"><span class="visually-hidden">Abrir Porta dos Fundos</span></button>
-          <span class="row-idx">04</span>
-          <span class="row-name">Porta dos Fundos</span>
-          <span class="row-meta">Coord. de Pós · 2022 › 2023</span>
-          <div class="panel" id="p-porta"><div><div class="panel-inner">
-            <span class="tagline">Humor · multiplataforma</span>
-            <p>Operação de entrega semanal de esquetes para múltiplas plataformas: coordenação de equipes de edição, motion e finalização, fluxos integrados entre criação, produção e pós, e relatórios de QC.</p>
-          </div></div></div>
-        </li>
-
-        <li class="row">
-          <button class="row-toggle" aria-expanded="false" aria-controls="p-para"><span class="visually-hidden">Abrir Paramount+</span></button>
-          <span class="row-idx">05</span>
-          <span class="row-name">Paramount+</span>
-          <span class="row-meta">Assist. Coord. · 2021 › 2022</span>
-          <div class="panel" id="p-para"><div><div class="panel-inner">
-            <span class="tagline">Originais brasileiros</span>
-            <p><strong>As Seguidoras</strong>, primeira ficção original da Paramount+ no Brasil: conform em todas as etapas e integração de telas na narrativa. <strong>Coração Suburbano</strong>: conformação, revisão técnica e padronização das entregas.</p>
+            <p>Supervisão dos fluxos de pós de séries documentais e programas lifestyle, alinhados aos padrões do Canal OFF, e organização da edição e finalização de campanhas para <strong>Banco C6</strong>, <strong>Cerveja Praya</strong> e <strong>BSC</strong>, com foco em controle de processos e gestão de ativos.</p>
+            <div class="mat">
+              <a href="https://www.instagram.com/mellinstudio.br/reel/DPkCyBqEtCL/" target="_blank" rel="noopener">Reel no Instagram</a>
+              <a href="https://www.instagram.com/p/DPMf_8aDmNV/" target="_blank" rel="noopener">Post no Instagram</a>
+            </div>
           </div></div></div>
         </li>
 
         <li class="row">
           <button class="row-toggle" aria-expanded="false" aria-controls="p-mara"><span class="visually-hidden">Abrir Maracutaia.fm</span></button>
-          <span class="row-idx">06</span>
+          <span class="row-idx">02</span>
           <span class="row-name">Maracutaia.fm</span>
           <span class="row-meta">Curadoria · 2025 → hoje</span>
           <div class="panel" id="p-mara"><div><div class="panel-inner">
             <span class="tagline">Cena eletrônica underground carioca</span>
-            <p>Curadoria musical e visual de sets audiovisuais, edição e finalização para YouTube e criação de peças promocionais, consolidando a identidade da marca.</p>
+            <p>Curadoria musical e visual de sets audiovisuais, edição e finalização para YouTube e criação de peças promocionais, consolidando o alcance e a identidade da marca.</p>
+            <div class="mat">
+              <a href="https://www.youtube.com/playlist?list=PLeN4eLs3ScfDhsppcAUj3U6U7azva0Vye" target="_blank" rel="noopener">Sets no YouTube</a>
+              <a href="https://www.instagram.com/reel/DCkTfXAx_Wl/" target="_blank" rel="noopener">Reel no Instagram</a>
+              <a href="https://www.instagram.com/p/DQEdCi7jiX0/" target="_blank" rel="noopener">Post no Instagram</a>
+            </div>
+          </div></div></div>
+        </li>
+
+        <li class="row">
+          <button class="row-toggle" aria-expanded="false" aria-controls="p-fabrica"><span class="visually-hidden">Abrir A Fábrica</span></button>
+          <span class="row-idx">03</span>
+          <span class="row-name">A Fábrica</span>
+          <span class="row-meta">Coord. de Pós · 2025</span>
+          <div class="panel" id="p-fabrica"><div><div class="panel-inner">
+            <span class="tagline">Séries e longas nacionais</span>
+            <p>Ciclo de vida completo de séries e longas como <strong>Galera FC</strong>, <strong>Agentes Muito Especiais</strong>, <strong>Temporada de Bônus</strong> e <strong>A Estranha na Cama</strong>: cronograma macro, controle orçamentário, gestão de ativos e interface entre a produção executiva e as áreas técnicas.</p>
+            <div class="mat">
+              <a href="https://www.youtube.com/watch?v=bZp_isvYVZc" target="_blank" rel="noopener">Galera FC</a>
+              <a href="https://www.youtube.com/watch?v=LvlqcTjahDE" target="_blank" rel="noopener">Agentes Muito Especiais</a>
+            </div>
+          </div></div></div>
+        </li>
+
+        <li class="row">
+          <button class="row-toggle" aria-expanded="false" aria-controls="p-gruposal"><span class="visually-hidden">Abrir Grupo Sal</span></button>
+          <span class="row-idx">04</span>
+          <span class="row-name">Grupo Sal</span>
+          <span class="row-meta">Assist. Coord. · 2024 › 2025</span>
+          <div class="panel" id="p-gruposal"><div><div class="panel-inner">
+            <span class="tagline">Canal OFF</span>
+            <p>Organização e supervisão dos fluxos de pós de séries documentais e programas lifestyle em <strong>É Tudo Delas</strong>, <strong>Ninguém Me Domina</strong>, <strong>Histórias do Coletivo</strong> e <strong>Por Trás do Desafio</strong>, reforçando a coesão técnica e narrativa das obras.</p>
+          </div></div></div>
+        </li>
+
+        <li class="row">
+          <button class="row-toggle" aria-expanded="false" aria-controls="p-dot"><span class="visually-hidden">Abrir DOT Cine</span></button>
+          <span class="row-idx">05</span>
+          <span class="row-name">DOT Cine</span>
+          <span class="row-meta">Assist. Coord. · 2023 › 2024</span>
+          <div class="panel" id="p-dot"><div><div class="panel-inner">
+            <span class="tagline">Netflix · Disney+ · Star+ · Max</span>
+            <p>Gestão do fluxo de materiais e entregáveis para players globais, cumprindo specs técnicas internacionais, com interlocução entre produtoras, ilhas de edição e plataformas, mitigação de riscos e controle de qualidade do conform.</p>
+            <div class="mat">
+              <a href="https://www.youtube.com/watch?v=4oDn5TBJA84" target="_blank" rel="noopener">Bom Dia, Verônica</a>
+              <a href="https://www.youtube.com/watch?v=q9xURvz3fCM" target="_blank" rel="noopener">A Magia de Aruna</a>
+              <a href="https://www.youtube.com/watch?v=isSQESXVgQ4" target="_blank" rel="noopener">Desejos S.A.</a>
+              <a href="https://www.youtube.com/watch?v=HggZDpcmeO4" target="_blank" rel="noopener">O Lado Bom de Ser Traída</a>
+              <a href="https://www.youtube.com/watch?v=TDi4yirmR00" target="_blank" rel="noopener">Luva de Pedreiro</a>
+            </div>
+          </div></div></div>
+        </li>
+
+        <li class="row">
+          <button class="row-toggle" aria-expanded="false" aria-controls="p-porta"><span class="visually-hidden">Abrir Porta dos Fundos</span></button>
+          <span class="row-idx">06</span>
+          <span class="row-name">Porta dos Fundos</span>
+          <span class="row-meta">Coord. de Pós · 2022 › 2023</span>
+          <div class="panel" id="p-porta"><div><div class="panel-inner">
+            <span class="tagline">Humor · multiplataforma</span>
+            <p>Operação de entrega semanal de esquetes para múltiplas plataformas: coordenação de equipes de edição, motion e finalização, fluxos integrados entre criação, produção e pós, e relatórios de QC.</p>
+            <div class="mat">
+              <a href="https://www.youtube.com/watch?v=h26072NTKvQ" target="_blank" rel="noopener">Assistir esquete</a>
+            </div>
+          </div></div></div>
+        </li>
+
+        <li class="row">
+          <button class="row-toggle" aria-expanded="false" aria-controls="p-para"><span class="visually-hidden">Abrir Paramount+</span></button>
+          <span class="row-idx">07</span>
+          <span class="row-name">Paramount+</span>
+          <span class="row-meta">Assist. Coord. · 2021 › 2022</span>
+          <div class="panel" id="p-para"><div><div class="panel-inner">
+            <span class="tagline">Originais brasileiros</span>
+            <p><strong>As Seguidoras</strong>, primeira ficção original da Paramount+ no Brasil: conform em todas as etapas e integração de telas na narrativa. <strong>Coração Suburbano</strong>: conformação, revisão técnica e padronização das entregas dentro dos prazos da plataforma.</p>
+            <div class="mat">
+              <a href="https://www.youtube.com/watch?v=8ZNqLAqp_Y8" target="_blank" rel="noopener">As Seguidoras</a>
+              <a href="https://www.youtube.com/watch?v=HC9PjbCKTT0" target="_blank" rel="noopener">Coração Suburbano</a>
+            </div>
+          </div></div></div>
+        </li>
+
+        <li class="row">
+          <button class="row-toggle" aria-expanded="false" aria-controls="p-dafinaf"><span class="visually-hidden">Abrir Dafina Produções · Formatos</span></button>
+          <span class="row-idx">08</span>
+          <span class="row-name">Dafina · Formatos</span>
+          <span class="row-meta">Roteiro · 2021</span>
+          <div class="panel" id="p-dafinaf"><div><div class="panel-inner">
+            <span class="tagline">Descomplica · NotCo · Discovery</span>
+            <p>Desenvolvimento e roteiro de formatos educacionais para o <strong>Descomplica</strong>, formatos originais para a <strong>NotCo</strong> (alimentação, tecnologia e branding) e para o <strong>Discovery+</strong>, alinhados à identidade editorial de cada marca.</p>
+          </div></div></div>
+        </li>
+
+        <li class="row">
+          <button class="row-toggle" aria-expanded="false" aria-controls="p-dafinae"><span class="visually-hidden">Abrir Dafina Produções · Finalização</span></button>
+          <span class="row-idx">09</span>
+          <span class="row-name">Dafina · Finalização</span>
+          <span class="row-meta">Edição · 2019 › 2021</span>
+          <div class="panel" id="p-dafinae"><div><div class="panel-inner">
+            <span class="tagline">Canal Brasil · A&amp;E</span>
+            <p>Séries <strong>302</strong> e <strong>502</strong> (Canal Brasil): organização, preparação técnica e finalização dos episódios, além do roteiro de conteúdos digitais e promos. <strong>Era de Ouro: O Nascimento dos Super-Heróis</strong> (A&amp;E): apoio à finalização e à construção do roteiro, em parceria com o Omelete.</p>
+            <div class="mat">
+              <a href="https://www.youtube.com/playlist?list=PLeN4eLs3ScfCBxwSvJLfvS7eYRyJUZ6id" target="_blank" rel="noopener">Série 302</a>
+              <a href="https://www.youtube.com/playlist?list=PLeN4eLs3ScfCU5ZhM3XQBPJQpcydHrGg6" target="_blank" rel="noopener">Série 502</a>
+            </div>
+          </div></div></div>
+        </li>
+
+        <li class="row">
+          <button class="row-toggle" aria-expanded="false" aria-controls="p-desco"><span class="visually-hidden">Abrir Descomplica</span></button>
+          <span class="row-idx">10</span>
+          <span class="row-name">Descomplica</span>
+          <span class="row-meta">Roteiro · 2019</span>
+          <div class="panel" id="p-desco"><div><div class="panel-inner">
+            <span class="tagline">Game show educacional ao vivo</span>
+            <p>Roteiro diário do game show <strong>Dez Segundos</strong>, com conteúdo dinâmico e linguagem ágil, transformando aprendizado em entretenimento para o público jovem e digital.</p>
+            <div class="mat">
+              <a href="https://www.techtudo.com.br/dicas-e-tutoriais/2019/10/temas-que-podem-cair-no-enem-2019-estude-no-10-segundos-do-descomplica.ghtml" target="_blank" rel="noopener">Na imprensa · TechTudo</a>
+            </div>
+          </div></div></div>
+        </li>
+
+        <li class="row">
+          <button class="row-toggle" aria-expanded="false" aria-controls="p-mqe"><span class="visually-hidden">Abrir Mulheres que Escrevem</span></button>
+          <span class="row-idx">11</span>
+          <span class="row-name">Mulheres que Escrevem</span>
+          <span class="row-meta">Edição · 2018 › 2022</span>
+          <div class="panel" id="p-mqe"><div><div class="panel-inner">
+            <span class="tagline">Podcast literário independente</span>
+            <p>Edição e finalização de episódios ao longo de mais de quatro anos, construindo a identidade sonora do podcast, em um projeto dedicado à valorização de vozes femininas na literatura.</p>
           </div></div></div>
         </li>
 
@@ -454,19 +468,19 @@
       <div class="cols cut">
         <div class="col">
           <h3>Edição &amp; finalização</h3>
-          <ul><li>DaVinci Resolve</li><li>Adobe Premiere Pro</li><li>Conform técnico</li><li>Organização de mídias</li></ul>
+          <ul><li>DaVinci Resolve</li><li>Adobe Premiere Pro</li><li>Conform técnico</li><li>Organização de mídias</li><li>Soluções de backup</li></ul>
         </div>
         <div class="col">
           <h3>Operação &amp; gestão</h3>
-          <ul><li>Cronograma macro</li><li>Gestão de ativos</li><li>Padronização de pipeline</li><li>Padrões de streaming</li></ul>
+          <ul><li>Cronograma macro</li><li>Gestão de ativos</li><li>Padronização de pipeline</li><li>Relatórios de fluxo e QC</li><li>Padrões de streaming</li></ul>
         </div>
         <div class="col">
           <h3>Conteúdo &amp; editorial</h3>
-          <ul><li>Roteiro de formatos</li><li>Promos</li><li>Curadoria</li><li>Escrita crítica</li></ul>
+          <ul><li>Roteiro de formatos</li><li>Promos</li><li>Curadoria de conteúdo</li><li>Escrita crítica e curatorial</li></ul>
         </div>
         <div class="col">
           <h3>IA no audiovisual</h3>
-          <ul><li>Transcrição e decupagem</li><li>Edição baseada em texto</li><li>QC assistido</li><li>NLP aplicado</li></ul>
+          <ul><li>Transcrição e decupagem</li><li>Edição baseada em texto</li><li>Magic Mask · Voice Isolation</li><li>QC assistido</li><li>NLP aplicado a conteúdo</li></ul>
         </div>
       </div>
     </section>
@@ -482,10 +496,16 @@
           <span class="row-meta">Medium · crítica de TV</span>
         </li>
         <li class="row">
+          <a class="row-toggle" href="https://www.academia.edu/30951846/A_Televis%C3%A3o_de_Qualidade_e_a_Com%C3%A9dia_na_TV_Paga_Norte_Americana_Quando_com%C3%A9dias_se_tornaram_dramas_de_30_minutos" target="_blank" rel="noopener" aria-label="Monografia sobre televisão de qualidade"></a>
+          <span class="row-idx">↗</span>
+          <span class="row-name">TV de Qualidade</span>
+          <span class="row-meta">Monografia · HBO / Enlightened</span>
+        </li>
+        <li class="row">
           <a class="row-toggle" href="https://www.academia.edu/36102539/HBO_e_a_Ruptura_do_Discurso_de_Diferencia%C3%A7%C3%A3o_o_caso_Enlightened_" target="_blank" rel="noopener" aria-label="Artigo sobre a HBO"></a>
           <span class="row-idx">↗</span>
-          <span class="row-name">HBO &amp; Enlightened</span>
-          <span class="row-meta">Artigo · TV de qualidade</span>
+          <span class="row-name">Ruptura da HBO</span>
+          <span class="row-meta">Artigo · discurso de diferenciação</span>
         </li>
       </ul>
     </section>
@@ -503,7 +523,7 @@
 
     <footer class="foot">
       <span>© 2026 Régis Regi · Rio de Janeiro</span>
-      <span>Protótipo minimalista</span>
+      <span>Portfólio 2026</span>
     </footer>
 
   </main>
@@ -511,7 +531,6 @@
   <script>
     (function () {
       "use strict";
-      var reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
       /* corte: cada bloco entra quando aparece */
       var cuts = document.querySelectorAll(".cut");
@@ -520,7 +539,7 @@
           es.forEach(function (e) {
             if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
           });
-        }, { threshold: 0.15, rootMargin: "0px 0px -8% 0px" });
+        }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
         cuts.forEach(function (c) { io.observe(c); });
       } else {
         cuts.forEach(function (c) { c.classList.add("in"); });
@@ -528,14 +547,12 @@
 
       /* rail: cena ativa */
       var railLinks = {};
-      document.querySelectorAll(".rail a").forEach(function (a) {
-        railLinks[a.dataset.sec] = a;
-      });
+      document.querySelectorAll(".rail a").forEach(function (a) { railLinks[a.dataset.sec] = a; });
       if ("IntersectionObserver" in window) {
         var spy = new IntersectionObserver(function (es) {
           es.forEach(function (e) {
             if (!e.isIntersecting) { return; }
-            Object.values(railLinks).forEach(function (a) { a.classList.remove("on"); });
+            Object.keys(railLinks).forEach(function (k) { railLinks[k].classList.remove("on"); });
             var link = railLinks[e.target.id];
             if (link) { link.classList.add("on"); }
           });
@@ -548,7 +565,7 @@
 
       /* linhas do índice: expandir metadados inline */
       document.querySelectorAll(".row .row-toggle").forEach(function (btn) {
-        if (btn.tagName !== "BUTTON") { return; }  /* âncoras externas ficam de fora */
+        if (btn.tagName !== "BUTTON") { return; }
         btn.addEventListener("click", function () {
           var row = btn.closest(".row");
           var open = row.classList.toggle("open");
